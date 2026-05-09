@@ -4,11 +4,18 @@ version = "0.1.0"
 description = "Self-hosted web search + fetch MCP server powered by SearXNG"
 requires-python = ">=3.11"
 dependencies = [
-    "mcp[cli]>=1.9.0",
+    "fastmcp>=2.0.0",
     "httpx>=0.28.0",
     "trafilatura>=2.0.0",
     "python-dotenv>=1.0.0",
+    "uvicorn[standard]>=0.34.0",
 ]
+
+[project.scripts]
+searxng-mcp = "src.server:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src"]
 
 [build-system]
 requires = ["hatchling"]
