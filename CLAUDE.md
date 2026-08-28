@@ -58,6 +58,10 @@ Reddit 站点快速通道(走原生 API 而非抓 HTML)。
 
 ## 已知短板与残留风险
 
+- 生产 search 间歇性 0 结果:Oracle 云 IP 上游引擎限流震荡(DDG/Startpage
+  CAPTCHA、brave 暂停),实测约 1 分钟自愈;search 已透传 unresponsive_engines
+  并在 0 结果时给 hint。社区现状:CAPTCHA solver 仍为未实现提案
+  (searxng#2844),治本需 outgoing.proxies 住宅代理或 IPv6 轮换(searxng-docker#183)
 - SPA/JS 渲染页面抓不到(实测 Power Apps Portal 站点仅拿到骨架);SearXNG
   搜索引擎收录的快照可作部分兜底
 - DNS rebinding 的 resolve-then-connect TOCTOU 窗口:个人场景接受

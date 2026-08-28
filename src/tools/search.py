@@ -76,6 +76,12 @@ async def _search_with_client(
             "score": score,
         })
 
+    # 引擎限流状态转可读字符串;数据中心 IP 上游会间歇性 CAPTCHA(震荡恢复)
+    unresponsive = [
+        f"{e[0]}: {e[1]}" if isinstance(e, list) and len(e) >= 2 else str(e)
+        for e in (data.get("unresponsive_engines") or [])
+    ]
+
     result = {
         "query": data.get("query", query),
         "count": len(results),
@@ -85,6 +91,13 @@ async def _search_with_client(
         "corrections": data.get("corrections") or [],
         "infoboxes": data.get("infoboxes") or [],
     }
+    if unresponsive:
+        result["unresponsive_engines"] = unresponsive
+    if not results and unresponsive:
+        result["hint"] = (
+            "0 条结果可能因上游引擎限流(见 unresponsive_engines),"
+            "限流通常在数分钟内自行恢复,可稍后重试或换查询词"
+        )
     _cache.set(cache_key, dict(result))
     return result
 

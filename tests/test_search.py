@@ -91,3 +91,34 @@ async def test_timeout_readable_error():
         result = await search_mod._search_with_client(client, "test")
     assert "error" in result
     assert "超时" in result["error"]
+
+
+async def test_unresponsive_engines_passthrough_with_hint():
+    """上游引擎被限流导致 0 结果时,透传引擎状态并给出 hint。"""
+    resp_data = {
+        **SEARXNG_RESPONSE,
+        "results": [],
+        "unresponsive_engines": [
+            ["duckduckgo", "CAPTCHA"],
+            ["brave", "Suspended: too many requests"],
+        ],
+    }
+    async with transport(
+        lambda req: httpx.Response(200, json=resp_data)
+    ) as client:
+        result = await search_mod._search_with_client(client, "test")
+    assert result["count"] == 0
+    assert result["unresponsive_engines"] == [
+        "duckduckgo: CAPTCHA",
+        "brave: Suspended: too many requests",
+    ]
+    assert "限流" in result["hint"]
+
+
+async def test_unresponsive_engines_absent_no_key():
+    async with transport(
+        lambda req: httpx.Response(200, json=SEARXNG_RESPONSE)
+    ) as client:
+        result = await search_mod._search_with_client(client, "test")
+    assert "unresponsive_engines" not in result
+    assert "hint" not in result
