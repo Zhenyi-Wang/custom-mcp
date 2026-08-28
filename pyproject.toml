@@ -4,11 +4,12 @@ version = "0.1.0"
 description = "Self-hosted web search + fetch MCP server powered by SearXNG"
 requires-python = ">=3.11"
 dependencies = [
-    "fastmcp>=2.0.0",
+    "fastmcp>=3.0.0",
     "httpx>=0.28.0",
     "trafilatura>=2.0.0",
     "python-dotenv>=1.0.0",
     "uvicorn[standard]>=0.34.0",
+    "pypdf>=6.16.2",
 ]
 
 [project.scripts]
@@ -20,3 +21,14 @@ packages = ["src"]
 [build-system]
 requires = ["hatchling"]
 build-backend = "hatchling.build"
+
+[dependency-groups]
+dev = [
+    "fpdf2>=2.8.8",
+    "pytest>=9.1.1",
+    "pytest-asyncio>=1.4.0",
+]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
