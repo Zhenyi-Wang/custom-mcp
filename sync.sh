@@ -9,9 +9,9 @@ RSYNC_EXCLUDE=(
     --exclude='.venv'
     --exclude='__pycache__'
     --exclude='*.pyc'
-    --exclude='uv.lock'
     --exclude='.env'
 )
+# uv.lock 必须同步:Dockerfile 用 uv sync --frozen 锁定依赖版本
 
 echo "==> syncing to ${REMOTE}:${REMOTE_DIR} ..."
 rsync -avz --delete "${RSYNC_EXCLUDE[@]}" "$(dirname "$0")/" "${REMOTE}:${REMOTE_DIR}/"
