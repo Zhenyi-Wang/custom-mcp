@@ -40,8 +40,9 @@ engines:
     disabled: false
   # 免费渠道扩充结论:
   # - mojeek 自有索引,但对 oracle 出口 IP 稳定 403,disabled 待命
-  # - marginalia 用官方公共 key "public"(常触发限速,不能自定义过滤;
-  #   正式 key 免费申请:about.marginalia-search.com/article/api)。
+  # - marginalia 当前用官方公共 key "public"(.env 的 MARGINALIA_API_KEY,
+  #   常触发限速,不能自定义过滤;正式 key 免费申请:
+  #   about.marginalia-search.com/article/api,拿到改 .env 即可)。
   #   坑:engines= 指定未加载引擎时 SearXNG 会静默退化为默认引擎集,
   #   结果全是他家条目,极易误判
   # - karmasearch 对本出口稳定 403,每次聚合白打请求并污染 unres,禁用
@@ -49,7 +50,7 @@ engines:
   - name: mojeek
     disabled: true
   - name: marginalia
-    api_key: "public"
+    api_key: "${MARGINALIA_API_KEY}"
     inactive: false
     disabled: false
   - name: karmasearch
