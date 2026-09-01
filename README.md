@@ -15,10 +15,8 @@ searxng-mcp (FastMCP 3.x, port 8000)
 ## 快速开始
 
 ```bash
-# 1. 创建 .env
-echo "MCP_TOKEN=$(openssl rand -hex 32)" > .env
-echo "SEARXNG_URL=http://searxng:8080" >> .env
-echo "BRAVE_API_KEY=<你的 Brave Search API key>" >> .env
+# 1. 创建 .env(从模板复制后填入密钥)
+cp .env.example .env
 
 # 2. 启动
 docker compose up -d
