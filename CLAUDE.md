@@ -58,10 +58,16 @@ Reddit 站点快速通道(走原生 API 而非抓 HTML)。
 
 ## 已知短板与残留风险
 
-- 生产 search 间歇性 0 结果:Oracle 云 IP 上游引擎限流震荡(DDG/Startpage
-  CAPTCHA、brave 暂停),实测约 1 分钟自愈;search 已透传 unresponsive_engines
-  并在 0 结果时给 hint。社区现状:CAPTCHA solver 仍为未实现提案
-  (searxng#2844),治本需 outgoing.proxies 住宅代理或 IPv6 轮换(searxng-docker#183)
+- 上游引擎按 TLS 指纹风控(2026-08 集中爆发,searxng#6596):httpx 的
+  Python 指纹被识别,换出口 IP 无效。2026-09-01 处置:换
+  ikidd/searxng-impersonate 镜像(PR#5476 快照 8c630f6;官方 ghcr 仅
+  amd64,oracle-main 是 arm64 需自建,构建命令见 docker-compose.yml 注释)
+  + 启用 braveapi 官方 API 兜底(免费层,不受网页风控)。现状:brave/
+  braveapi 稳定,DDG 间歇(粘性 CAPTCHA 随冷却恢复,impersonate 防新封),
+  startpage 仍需手动过码:ssh -D SOCKS5 让浏览器走服务器出口 IP 访问
+  引擎完成验证(docs.searxng.org/admin/answer-captcha.html)
+- search 缓存 key 含全部查询参数:风控期间的空结果会被缓存 1h,重启
+  mcp-server 可清空(dict+TTL 进程内缓存)
 - SPA/JS 渲染页面抓不到(实测 Power Apps Portal 站点仅拿到骨架);SearXNG
   搜索引擎收录的快照可作部分兜底
 - DNS rebinding 的 resolve-then-connect TOCTOU 窗口:个人场景接受
