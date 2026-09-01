@@ -5,7 +5,10 @@ name: custom-mcp-local
 
 services:
   searxng:
-    image: docker.io/searxng/searxng:latest
+    # 与生产同款 impersonate fork(见 settings.yml 头部注释)。ghcr.io/ikidd
+    # 官方镜像仅 amd64,arm64 需源码自建(生产 compose 有构建命令);
+    # amd64 机器可直接用 ghcr.io/ikidd/searxng-impersonate:8c630f6
+    image: searxng-impersonate:8c630f6
     restart: unless-stopped
     volumes:
       - ./searxng/settings.yml:/etc/searxng/settings.yml:ro

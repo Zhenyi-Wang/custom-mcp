@@ -15,3 +15,18 @@ server:
   secret_key: "change-me-in-production"
   limiter: false
   method: "GET"
+
+# 上游引擎 TLS 指纹风控(2026-08 集中爆发,searxng#6596):httpx 的 Python
+# TLS 指纹配 Firefox UA 被识别为机器人,换出口 IP 无效。需配合
+# ghcr.io/ikidd/searxng-impersonate 镜像(PR searxng#5476),以真实浏览器
+# TLS/HTTP 指纹出站;use_default_settings 下仅按 name 覆盖对应字段。
+engines:
+  - name: brave
+    network:
+      impersonate: "chrome"
+  - name: duckduckgo
+    network:
+      impersonate: "firefox"
+  - name: startpage
+    network:
+      impersonate: "firefox"

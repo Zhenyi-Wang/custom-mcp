@@ -2,7 +2,14 @@ name: custom-mcp
 
 services:
   searxng:
-    image: docker.io/searxng/searxng:latest
+    # impersonate fork(PR#5476 固定快照 8c630f6):上游引擎按 TLS 指纹风控
+    # (httpx 指纹被识别),见 searxng/settings.yml 头部注释与 searxng#6596。
+    # 官方 ghcr 镜像只有 amd64,oracle-main 是 arm64,需在 oracle-main 上自建:
+    #   git clone https://github.com/ikidd/searxng-impersonate.git /tmp/searxng-impersonate
+    #   cd /tmp/searxng-impersonate
+    #   docker build -f container/builder.dockerfile -t localhost/searxng/searxng:builder .
+    #   docker build -f container/dist.dockerfile -t searxng-impersonate:8c630f6 .
+    image: searxng-impersonate:8c630f6
     restart: unless-stopped
     volumes:
       - ./searxng/settings.yml:/etc/searxng/settings.yml:ro
