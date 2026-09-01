@@ -28,6 +28,11 @@ if [[ "${1:-}" == "--rebuild" ]]; then
 elif [[ "${1:-}" == "--restart" ]]; then
     echo "==> restarting mcp-server ..."
     ssh "$REMOTE" "cd ${REMOTE_DIR} && sudo docker compose restart mcp-server"
+elif [[ "${1:-}" == "--searxng" ]]; then
+    # 换 .env 里的引擎 key 后用:settings.yml 是挂载文件,内容变化 compose
+    # 不可见,必须重启 searxng 才生效
+    echo "==> restarting searxng ..."
+    ssh "$REMOTE" "cd ${REMOTE_DIR} && sudo docker compose restart searxng"
 fi
 
 echo "==> done"

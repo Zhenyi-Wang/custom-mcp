@@ -9,6 +9,7 @@ uv run pytest                                      # 全量测试(60 用例)
 docker compose -f docker-compose.local.yml up -d   # 本地试跑环境(与生产隔离)
 scripts/mcp-call.sh <tool> '<json>'                # 调用本地 MCP 工具验证
 ./sync.sh --rebuild                                # 部署生产(oracle-main)
+./sync.sh --searxng                                # 换 .env 引擎 key 后:渲染+同步+重启 searxng
 ```
 
 - 工具签名只增带默认值参数,返回 dict 保留旧字段(向后兼容)
