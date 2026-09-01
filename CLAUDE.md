@@ -67,10 +67,11 @@ Reddit 站点快速通道(走原生 API 而非抓 HTML)。
   startpage 已禁用——2026-08 起上 Anubis PoW 防护(searxng#6520),挑战需
   执行 JS,手动过码与 impersonate 均无效,待上游 PoW solver patch
   (vojkovic/searxng cffi 分支)并入后重新启用。渠道扩充:braveapi 为
-  免费层(限 1 qps / 2000 次/月);marginalia 已启用(长尾查询,商业
-  查询为空属索引特性);mojeek 对本出口 403 disabled 待命;公共
-  SearXNG 实例聚合实测不可行(limiter+JSON 禁用);Serper 等需自写
-  引擎文件,暂缓
+  免费层(限 1 qps / 2000 次/月);mojeek 对本出口 403 disabled 待命;
+  karmasearch 同因 403 禁用;marginalia 需免费 API key 未申请(注意:
+  engines= 指定未加载引擎时 SearXNG 会静默退化为默认引擎集,极易
+  误判为引擎在工作);公共 SearXNG 实例聚合实测不可行(limiter+JSON
+  禁用);Serper 等需自写引擎文件,暂缓
 - search 缓存 key 含全部查询参数:风控期间的空结果会被缓存 1h,重启
   mcp-server 可清空(dict+TTL 进程内缓存)
 - SPA/JS 渲染页面抓不到(实测 Power Apps Portal 站点仅拿到骨架);SearXNG
