@@ -13,6 +13,12 @@ RSYNC_EXCLUDE=(
 )
 # uv.lock 必须同步:Dockerfile 用 uv sync --frozen 锁定依赖版本
 
+# 渲染 settings.yml:模板入库,真实文件(含密钥)从 .env 渲染生成,不入库
+# (.env 提供 BRAVE_API_KEY 等,占位符语法 ${VAR} 由 envsubst 展开)
+echo "==> rendering searxng/settings.yml from template ..."
+set -a; source "$(dirname "$0")/.env"; set +a
+envsubst < "$(dirname "$0")/searxng/settings.yml.example" > "$(dirname "$0")/searxng/settings.yml"
+
 echo "==> syncing to ${REMOTE}:${REMOTE_DIR} ..."
 rsync -avz --delete "${RSYNC_EXCLUDE[@]}" "$(dirname "$0")/" "${REMOTE}:${REMOTE_DIR}/"
 

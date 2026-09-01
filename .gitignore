@@ -4,3 +4,5 @@ __pycache__/
 .venv/
 dist/
 *.egg-info/
+# 由 sync.sh 从 settings.yml.example + .env 渲染生成,含密钥,不入库
+searxng/settings.yml
