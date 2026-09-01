@@ -30,3 +30,9 @@ engines:
   - name: startpage
     network:
       impersonate: "firefox"
+  # Brave 官方 API:走 api.search.brave.com + key 认证,不经网页风控,
+  # 作为免费层兜底(默认条目 inactive: true,须显式启用)
+  - name: braveapi
+    api_key: "REDACTED"
+    inactive: false
+    disabled: false
