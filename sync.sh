@@ -15,8 +15,20 @@ RSYNC_EXCLUDE=(
 
 # 渲染 settings.yml:模板入库,真实文件(含密钥)从 .env 渲染生成,不入库
 # (.env 提供 BRAVE_API_KEY 等,占位符语法 ${VAR} 由 envsubst 展开)
+# 密钥清单与恢复路径见 CLAUDE.md;备份在 oracle:/root/secrets/custom-mcp.env
+ENV_FILE="$(dirname "$0")/.env"
+if [[ ! -f "$ENV_FILE" ]]; then
+    echo "错误: 找不到 $ENV_FILE,从备份恢复: scp oracle:/root/secrets/custom-mcp.env .env" >&2
+    exit 1
+fi
+for var in BRAVE_API_KEY MARGINALIA_API_KEY MCP_TOKEN; do
+    if ! grep -q "^${var}=." "$ENV_FILE"; then
+        echo "错误: .env 缺少 ${var},渲染会产出空 key 导致引擎初始化失败" >&2
+        exit 1
+    fi
+done
 echo "==> rendering searxng/settings.yml from template ..."
-set -a; source "$(dirname "$0")/.env"; set +a
+set -a; source "$ENV_FILE"; set +a
 envsubst < "$(dirname "$0")/searxng/settings.yml.example" > "$(dirname "$0")/searxng/settings.yml"
 
 echo "==> syncing to ${REMOTE}:${REMOTE_DIR} ..."

@@ -93,6 +93,19 @@ Reddit 站点快速通道(走原生 API 而非抓 HTML)。
 
 - 提交:Conventional Commits 中文,不提及 Claude,不加 Co-Authored-By,
   提交前等用户明确指示,按功能点分次提交
+
+## 密钥与恢复
+
+- 密钥只存两处:本地 `.env`(不入库)与
+  `oracle:/root/secrets/custom-mcp.env`(root:600 备份,sync.sh 不会
+  碰它)。重新 clone 后从备份恢复:`scp` 回来改名为 `.env` 即可;
+  sync.sh 会校验必需变量(BRAVE_API_KEY/MARGINALIA_API_KEY/MCP_TOKEN),
+  缺失即拒绝部署
+- 最坏情况恢复路径(全部可重建):BRAVE_API_KEY → Brave 控制台重发;
+  MARGINALIA_API_KEY → about.marginalia-search.com 重新申请;生产
+  MCP_TOKEN → `~/.claude.json` 的 custom-mcp Bearer 里有一份,或
+  `openssl rand -hex 32` 重生成后同步更新远端 `.env` 与 Claude 配置。
+  本地仓库 `.env` 的 MCP_TOKEN 仅用于本地试跑环境,与生产无关
 - 测试:trafilatura 对过短文档会退化为降级提取(nav 不剔除、无标题标记),
   测试夹具必须保持文章型正文量(tests/test_fetch.py 的 HTML 夹具有注释说明)
 - 本地验证用 httpx.MockTransport,DNS 用 resolver 注入 mock,不打真网
