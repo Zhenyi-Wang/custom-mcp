@@ -27,9 +27,11 @@ engines:
   - name: duckduckgo
     network:
       impersonate: "firefox"
+  # startpage 已上 Anubis PoW 防护(2026-08,searxng#6520):挑战要求执行
+  # JS 计算,浏览器无感通过、SearXNG 无法通过,手动过码/impersonate 均无效;
+  # 待上游 PoW solver(vojkovic/searxng cffi 分支)并入后再启用
   - name: startpage
-    network:
-      impersonate: "firefox"
+    disabled: true
   # Brave 官方 API:走 api.search.brave.com + key 认证,不经网页风控,
   # 作为免费层兜底(默认条目 inactive: true,须显式启用)
   - name: braveapi

@@ -63,9 +63,10 @@ Reddit 站点快速通道(走原生 API 而非抓 HTML)。
   ikidd/searxng-impersonate 镜像(PR#5476 快照 8c630f6;官方 ghcr 仅
   amd64,oracle-main 是 arm64 需自建,构建命令见 docker-compose.yml 注释)
   + 启用 braveapi 官方 API 兜底(免费层,不受网页风控)。现状:brave/
-  braveapi 稳定,DDG 间歇(粘性 CAPTCHA 随冷却恢复,impersonate 防新封),
-  startpage 仍需手动过码:ssh -D SOCKS5 让浏览器走服务器出口 IP 访问
-  引擎完成验证(docs.searxng.org/admin/answer-captcha.html)
+  braveapi 稳定,DDG 间歇(粘性 CAPTCHA 波动,impersonate 防新封,可自愈);
+  startpage 已禁用——2026-08 起上 Anubis PoW 防护(searxng#6520),挑战需
+  执行 JS,手动过码与 impersonate 均无效,待上游 PoW solver patch
+  (vojkovic/searxng cffi 分支)并入后重新启用
 - search 缓存 key 含全部查询参数:风控期间的空结果会被缓存 1h,重启
   mcp-server 可清空(dict+TTL 进程内缓存)
 - SPA/JS 渲染页面抓不到(实测 Power Apps Portal 站点仅拿到骨架);SearXNG
